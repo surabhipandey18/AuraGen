@@ -4,17 +4,17 @@ from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
-print("GEMINI_API_KEY loaded:", app.config.get("GEMINI_API_KEY"))
+
 @app.route("/")
 def home():
     return render_template("home.html")
-
 @app.route("/meditation")
 def meditation():
     return render_template("meditation.html")
 @app.route("/mood")
 def mood_log():
     return render_template("mood.html")
+
 @app.route("/chatbot")
 def chat_page(): return render_template("chatbot.html")
 @app.route("/spotify")
@@ -44,6 +44,13 @@ def chat():
     except Exception as e:
         
         return jsonify({"reply": f"Error: {str(e)}"}), 500
+
+@app.route("/journal")
+def journal():
+    return render_template("journal.html")
+@app.route("/journal_copy")
+def journal_copy():
+    return render_template("journal_copy.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

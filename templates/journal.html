@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Home - SoulBloom{% endblock %}
+
+{% block content %}
+<main>
+<h2>My Journal</h2>
+<p style="margin-left: 225px;font-weight: lighter;">Capture your thoughts and reflections</p>
+<div class="journal-box">
+    <h4>Start Writing Today</h4>
+    <p>Express your thoughts, feelings, and experiences in your digital journal</p>
+    <a href="{{ url_for('journal_copy') }}" class="btn-journal"><img src="{{ url_for('static', filename='images/pen.png') }}" alt="pen icon">New Entry</a>
+</div>
+</main>
+{% endblock %}
