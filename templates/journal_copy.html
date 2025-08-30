@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Home - SoulBloom{% endblock %}
+
+{% block content %}
+<main>
+    <div class="journal-container">
+    <h2>New Journal Entry</h2>
+
+    <div class="mood-picker">
+        <label for="mood-picker" style="font-family: 'Bree Serif', serif;">How are you feeling today buddy?</label>
+    <span id="selectedMood" class="selected-mood">🙂</span>
+    <div id="moodOptions" class="mood-options">
+      <span>😢</span>
+      <span>😐</span>
+      <span>🙂</span>
+      <span>😊</span>
+      <span>😄</span>
+    </div>
+  </div>
+
+  <script>
+    const selectedMood = document.getElementById("selectedMood");
+    const moodOptions = document.getElementById("moodOptions");
+
+    selectedMood.addEventListener("click", () => {
+      moodOptions.classList.toggle("show");
+    });
+
+    moodOptions.addEventListener("click", (e) => {
+      if (e.target.tagName === "SPAN") {
+        selectedMood.textContent = e.target.textContent;
+        moodOptions.classList.remove("show");
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".mood-picker")) {
+        moodOptions.classList.remove("show");
+      }
+    });
+  </script>
+    <input type="text" class="entry-title" placeholder="Enter title...">
+    <textarea class="entry-text" placeholder="What's on your mind today? Write freely about your thoughts, feelings, experiences, or anything that comes to heart..."></textarea>
+    <div class="buttons">
+      <button class="btn cancel">Cancel</button>
+      <button class="btn save">Save Entry</button>
+    </div>
+  </div>
+
+</main>
+
+{% endblock %}
