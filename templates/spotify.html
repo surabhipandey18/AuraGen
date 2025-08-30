@@ -1,56 +1,80 @@
 {% extends "base.html" %}
 
-{% block title %}Home - SoulBloom{% endblock %}
+{% block title %}Spotify - SoulBloom{% endblock %}
 
 {% block content %}
-
 <main style="padding:2rem;">
     <div class="card">
-        <h2>Relaxing Music 🎵</h2>
-        <input type="text" id="spotifyQuery" placeholder="Search for playlists or tracks...">
+        <h2>🎧 Music & Podcasts</h2>
+        <input type="text" id="spotifyQuery" placeholder="Search for songs or podcasts...">
+
+        <select id="spotifyType">
+            <option value="track">Songs 🎶</option>
+            <option value="show">Podcasts 🎙️</option>
+        </select>
+
         <button onclick="searchSpotify()">Search</button>
     </div>
 
-    <div id="spotifyResults"></div>
+    <div id="spotifyResults" style="margin-top:1rem;"></div>
 </main>
-
-
 
 <footer>
     &copy; 2025 SoulBloom. All rights reserved.
 </footer>
 
 <script>
-const token = localStorage.getItem("token") || "";
-
 function searchSpotify() {
     const q = document.getElementById("spotifyQuery").value;
-    fetch("/api/spotify/search?q="+encodeURIComponent(q), {
-        headers: { "Authorization": "Bearer "+token }
-    })
-    .then(r=>r.json())
-    .then(data=>{
+    const type = document.getElementById("spotifyType").value;
+
+    if (!q) {
+        alert("Please enter a search term!");
+        return;
+    }
+
+    fetch(`/api/spotify/search?q=${encodeURIComponent(q)}&type=${type}`)
+    .then(r => r.json())
+    .then(data => {
         const results = document.getElementById("spotifyResults");
-        results.innerHTML="";
-        if(data.playlists && data.playlists.items.length>0){
-            data.playlists.items.forEach(pl=>{
+        results.innerHTML = "";
+
+        if (type === "track" && data.tracks && data.tracks.items.length > 0) {
+            results.innerHTML = "<h3>Songs 🎶</h3>";
+            data.tracks.items.forEach(tr => {
                 const div = document.createElement("div");
-                div.className="entry";
-                div.innerHTML=`<strong>${pl.name}</strong><br><a href="${pl.external_urls.spotify}" target="_blank">Open in Spotify</a>`;
+                div.className = "entry";
+                const spotifyLink = tr.external_urls?.spotify || "#";
+                div.innerHTML = `
+                    <img src="${tr.album.images[0]?.url}" width="80"><br>
+                    <strong>${tr.name}</strong> by ${tr.artists.map(a=>a.name).join(", ")}<br>
+                    <a href="${spotifyLink}" target="_blank">Open in Spotify</a><br>
+                    ${tr.preview_url ? `<audio controls src="${tr.preview_url}"></audio>` : "<em>No preview available</em>"}
+                `;
                 results.appendChild(div);
             });
         }
-        if(data.tracks && data.tracks.items.length>0){
-            data.tracks.items.forEach(tr=>{
+
+        if (type === "show" && data.shows && data.shows.items.length > 0) {
+            results.innerHTML = "<h3>Podcasts 🎙️</h3>";
+            data.shows.items.forEach(show => {
                 const div = document.createElement("div");
-                div.className="entry";
-                div.innerHTML=`<strong>${tr.name}</strong> by ${tr.artists.map(a=>a.name).join(", ")}<br>
-                <audio controls src="${tr.preview_url}"></audio>`;
+                div.className = "entry";
+                const spotifyLink = show.external_urls?.spotify || "#";
+                div.innerHTML = `
+                    <img src="${show.images[0]?.url}" width="100"><br>
+                    <strong>${show.name}</strong><br>
+                    <em>${show.publisher}</em><br>
+                    <a href="${spotifyLink}" target="_blank">Listen on Spotify</a>
+                `;
                 results.appendChild(div);
             });
         }
+    })
+    .catch(err => {
+        console.error("Spotify error:", err);
+        document.getElementById("spotifyResults").innerHTML = "<p>Error fetching results.</p>";
     });
 }
 </script>
-
 {% endblock %}
