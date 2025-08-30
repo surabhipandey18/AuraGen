@@ -24,7 +24,7 @@
       chatBox.innerHTML += `<div class="user">You: ${message}</div>`;
 
       // Call backend API
-      let response = await fetch("/api/chat", {   // ✅ relative path use karo
+      let response = await fetch("/api/chat", {   
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ message })
