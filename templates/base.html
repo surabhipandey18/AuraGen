@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SoulBloom{% endblock %}</title>
+
+    <!-- Flask static linking -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
+</head>
+<body>
+    <header class="site-header">
+    <img src="{{ url_for('static', filename='images/logo.png')}}" id="logo">
+    <p id="heading">SoulBloom</p>
+    </header>
+
+    <div class="box">
+  <nav class="nav-bar">
+    <a class="btn" href="/"><img src="{{ url_for('static', filename='images/home.png') }}" alt="home icon">Home</a>
+    <a class="btn" href="/meditation"><img src="{{ url_for('static', filename='images/meditation.png') }}" alt="meditation icon">Meditation</a>
+    <a class="btn" href="/mood"><img src="{{ url_for('static', filename='images/mood.png') }}" alt="mood icon">Log Your Mood</a>
+    <a class="btn" href="/journal"><img src="{{ url_for('static', filename='images/journal.png') }}" alt="journal icon">Journal</a>
+    <a class="btn" href="/spotify"><img src="{{ url_for('static', filename='images/music.png') }}" alt="music icon">Your Calm Space</a>
+    <a class="btn" href="/chatbot"><img src="{{ url_for('static', filename='images/chatbot.png') }}" alt="chatbot icon">Your Companion</a>
+  </nav>
+</div>
+
+    <main class="box">
+        {%block content%}
+        {%endblock%}
+    </main>
+
+<footer id="footer">&copy;2025. All rights reserved.</footer>    
+</body>
+</html>

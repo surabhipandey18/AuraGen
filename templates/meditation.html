@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Meditation - SoulBloom{% endblock %}
+
+{% block content %}
+<main>
+    <p style="text-align:center; font-family:'Bree Serif', serif; margin: 10px auto; max-width:600px; color:#021D4F;">
+    Take a deep breath, choose a meditation that resonates with you, and let your mind unwind.
+    </p>
+
+    <h2>Your Serene Soundscape</h2>
+    <div class="track-container">
+        <div class="track-card">
+            <img src="{{ url_for('static', filename='images/calm breathing.png') }}" alt="track thumbnail">
+            <h3>Calm Breathing</h3>
+            <audio controls>
+                <source src="{{ url_for('static', filename='audios/breathing.mp3') }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <p>
+                Focus on your breath to anchor yourself in the present moment. This guided session is perfect for
+                reducing stress and finding inner calm, one breath at a time.
+            </p>
+        </div>    
+      <div class="track-card">
+            <img src="{{ url_for('static', filename='images/med-for-sleep.png') }}" alt="track thumbnail">
+            <h3>Meditation For Calm Sleep</h3>
+            <audio controls>
+                <source src="{{ url_for('static', filename='audios/Body-Scan-for-Sleep.mp3') }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <p>
+                Drift into a restful sleep with this soothing sound and peaceful narratives. This track is designed
+                to help you quiet your mind and prepare your body for deep rest.
+            </p>
+        </div>
+      <div class="track-card">
+            <img src="{{ url_for('static', filename='images/anxiety-relief.png') }}" alt="track thumbnail">
+            <h3>Meditation For Anxiety Relief</h3>
+            <audio controls>
+                <source src="{{ url_for('static', filename='audios/anxietyreliefoliverjamesjenkin (1).mp3') }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <p>
+                Find a sense of peace and security with this track tailored to reduce anxiety. This soundscape and guided
+                session offer a retreat from daily stress.
+            </p>
+        </div>
+      <div class="track-card">
+            <img src="{{ url_for('static', filename='images/med-for-focus.png') }}" alt="track thumbnail">
+            <h3>Meditation For Focus</h3>
+            <audio controls>
+                <source src="{{ url_for('static', filename='audios/focus-med.mp3') }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <p>
+            Improve your concentration and productivity. These tracks use binaural beats and ambient sounds to help you
+            tune out distractions and achieve deep focus.
+            </p>
+        </div>
+      <div class="track-card">
+            <img src="{{ url_for('static', filename='images/med-for-morning.png') }}" alt="track thumbnail">
+            <h3>Morning Meditation</h3>
+            <audio controls>
+                <source src="{{ url_for('static', filename='audios/morning-med.mp3') }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <p>
+            Start your day with clarity and intention. This session is designed to awaken your mind, set a positive
+            tone, and prepare you for a mindful day ahead.
+            </p>
+        </div>                          
+      <div class="track-card">
+            <img src="{{ url_for('static', filename='images/med-for-bodyscan.png') }}" alt="track thumbnail">
+            <h3>Body Scan</h3>
+            <audio controls>
+                <source src="{{ url_for('static', filename='audios/body-scan.mp3') }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <p>
+            Reconnect with your body and release tension. This guided session helps you build a deeper awareness of
+            your physical sensations and find relaxation from head to toe.
+            </p>
+        </div>
+    </div>
+
+</main>
+{% endblock %}
