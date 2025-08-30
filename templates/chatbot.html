@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Home - SoulBloom{% endblock %}
+{% block title %}Chatbot - SoulBloom{% endblock %}
 
 {% block content %}
 <main>
@@ -14,30 +14,163 @@
   </div>
 
   <script>
+    function getTime() {
+      const now = new Date();
+      return now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+    }
+
     async function sendMessage() {
       const input = document.getElementById("userInput");
       const message = input.value.trim();
       if (!message) return;
 
-      // Show user message
       const chatBox = document.getElementById("chat-box");
-      chatBox.innerHTML += `<div class="user">You: ${message}</div>`;
 
-      // Call backend API
-      let response = await fetch("/api/chat", {   
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ message })
-      });
-
-      let data = await response.json();
-
-      // Show bot reply
-      chatBox.innerHTML += `<div class="bot">Bot: ${data.reply}</div>`;
-
+      // User message
+      const userDiv = document.createElement("div");
+      userDiv.className = "user";
+      userDiv.innerHTML = `<span class="msg-text">You: ${message}</span> <span class="time">${getTime()}</span>`;
+      chatBox.appendChild(userDiv);
       input.value = "";
       chatBox.scrollTop = chatBox.scrollHeight;
+
+      // Bot typing indicator
+      const typingDiv = document.createElement("div");
+      typingDiv.className = "bot typing";
+      typingDiv.innerHTML = `<span></span><span></span><span></span>`;
+      chatBox.appendChild(typingDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      try {
+        let response = await fetch("/api/chat", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({ message })
+        });
+        let data = await response.json();
+
+        // Remove typing
+        typingDiv.remove();
+
+        // Bot reply
+        const botDiv = document.createElement("div");
+        botDiv.className = "bot";
+        botDiv.innerHTML = `<span class="msg-text">Bot: ${data.reply}</span> <span class="time">${getTime()}</span>`;
+        chatBox.appendChild(botDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } catch (err) {
+        typingDiv.remove();
+        const errorDiv = document.createElement("div");
+        errorDiv.className = "bot";
+        errorDiv.innerHTML = `<span class="msg-text">Bot: Error connecting to server.</span> <span class="time">${getTime()}</span>`;
+        chatBox.appendChild(errorDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        console.error(err);
+      }
     }
   </script>
+
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+    .chat-container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+
+    h1 { text-align: center; color: #0077b6; }
+
+    #chat-box {
+      height: 450px;
+      overflow-y: auto;
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      background: #fefefe;
+    }
+
+    .input-area {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 0.6rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    .input-area button {
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      border: none;
+      background: #0077b6;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .input-area button:hover { background: #005f87; }
+
+    /* Chat bubbles */
+    .user, .bot {
+      padding: 0.6rem 1rem;
+      margin: 0.5rem 0;
+      border-radius: 15px;
+      display: inline-block;
+      max-width: 80%;
+      position: relative;
+    }
+
+    .user {
+      background: #d1e7dd;
+      text-align: right;
+      margin-left: auto;
+    }
+
+    .bot {
+      background: #f8d7da;
+      text-align: left;
+      margin-right: auto;
+    }
+
+    .msg-text { display: inline-block; }
+    .time {
+      display: inline-block;
+      font-size: 0.7rem;
+      color: #555;
+      margin-left: 0.5rem;
+    }
+
+    /* Typing dots animation */
+    .bot.typing {
+      background: #f8d7da;
+      border-radius: 15px;
+      padding: 0.6rem 1rem;
+      display: inline-block;
+      position: relative;
+    }
+
+    .bot.typing span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      margin: 0 2px;
+      background: #c82333;
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out both;
+    }
+
+    .bot.typing span:nth-child(1) { animation-delay: 0s; }
+    .bot.typing span:nth-child(2) { animation-delay: 0.2s; }
+    .bot.typing span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+  </style>
 </main>
+
 {% endblock %}

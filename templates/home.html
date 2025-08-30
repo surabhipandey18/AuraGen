@@ -3,12 +3,167 @@
 {% block title %}Home - SoulBloom{% endblock %}
 
 {% block content %}
-<main>
-<div class="quote-box" id="quoteBox">
-    <p class="quote-text" id="quoteText">Loading a beautiful thought...</p>
-    <p class="quote-author" id="quoteAuthor">- Author Unknown</p>
-    <div class="quote-loading" id="loadingIndicator" style="display: none;">Fetching new wisdom...</div>
-</div>
+<main style="padding:2rem; max-width:1000px; margin:auto;">
 
+  <!-- Daily Inspiration Quote -->
+  <h2 style="text-align:center; margin-bottom:20px; color:#e91e63; font-family:'Segoe UI', sans-serif;">
+    🌸 Daily Inspiration
+  </h2>
+  <div id="quoteBox"></div>
+
+  <!-- Top Cards Section -->
+  <div class="cards-container">
+    <div class="card">
+      <div class="icon">❤️</div>
+      <h3>Self-Care Reminder</h3>
+      <p>Take a moment to breathe deeply</p>
+    </div>
+    <div class="card">
+      <div class="icon">🧠</div>
+      <h3>Mindfulness Tip</h3>
+      <p>Focus on the present moment</p>
+    </div>
+    <div class="card">
+      <div class="icon">✨</div>
+      <h3>Today's Goal</h3>
+      <p>Practice gratitude and kindness</p>
+    </div>
+  </div>
+
+  <!-- Quick Wellness Tips Section -->
+  <h3 style="margin-top:40px; margin-bottom:15px; color:#555;">Quick Wellness Tips</h3>
+  <div class="wellness-tips">
+    <div class="tip">
+      <span>💧</span>
+      <div>
+        <strong>Stay Hydrated</strong>
+        <p>Drink at least 8 glasses of water today</p>
+      </div>
+    </div>
+    <div class="tip">
+      <span>🌞</span>
+      <div>
+        <strong>Get Sunlight</strong>
+        <p>Spend 15 minutes outdoors</p>
+      </div>
+    </div>
+    <div class="tip">
+      <span>🌱</span>
+      <div>
+        <strong>Take Breaks</strong>
+        <p>Step away from screens every hour</p>
+      </div>
+    </div>
+    <div class="tip">
+      <span>🧘‍♂️</span>
+      <div>
+        <strong>Practice Mindfulness</strong>
+        <p>Take 5 deep breaths right now</p>
+      </div>
+    </div>
+  </div>
 </main>
+
+<!-- CSS -->
+<style>
+/* Quote Box */
+#quoteBox {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 700px;
+  background: #e59def;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #222;
+  border: 3px solid #e91e63;
+  box-shadow: 0 0 15px rgba(229, 157, 239, 0.6);
+  animation: pulseBox 3s infinite ease-in-out;
+}
+
+@keyframes pulseBox {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 15px rgba(229, 157, 239, 0.6); }
+  50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(229, 157, 239, 0.9); }
+}
+
+/* Top Cards */
+.cards-container {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cards-container .card {
+  background: #f0f8ff;
+  border-radius: 15px;
+  padding: 20px;
+  flex: 1 1 250px;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.cards-container .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.18);
+}
+
+.cards-container .icon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+/* Wellness Tips */
+.wellness-tips {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.wellness-tips .tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 15px;
+  border-radius: 12px;
+  background: #f9f9f9;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.wellness-tips .tip span {
+  font-size: 2rem;
+}
+
+/* Typography */
+h3 {
+  margin: 0;
+  color: #333;
+}
+
+p {
+  margin: 3px 0 0 0;
+  color: #555;
+}
+</style>
+
+<!-- JS for Quote -->
+<script>
+fetch("/api/quote")
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById("quoteBox").innerHTML =
+      `"${data.quote}" <br><em>- ${data.author}</em>`;
+  })
+  .catch(() => {
+    document.getElementById("quoteBox").innerHTML =
+      `"Keep going — small steps matter."<br><em>- SoulBloom</em>`;
+  });
+</script>
+
 {% endblock %}
+
+
