@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Home - SoulBloom{% endblock %}
+
+{% block content %}
+
+<main style="padding:2rem;">
+    <div class="card">
+        <h2>Relaxing Music 🎵</h2>
+        <input type="text" id="spotifyQuery" placeholder="Search for playlists or tracks...">
+        <button onclick="searchSpotify()">Search</button>
+    </div>
+
+    <div id="spotifyResults"></div>
+</main>
+
+
+
+<footer>
+    &copy; 2025 SoulBloom. All rights reserved.
+</footer>
+
+<script>
+const token = localStorage.getItem("token") || "";
+
+function searchSpotify() {
+    const q = document.getElementById("spotifyQuery").value;
+    fetch("/api/spotify/search?q="+encodeURIComponent(q), {
+        headers: { "Authorization": "Bearer "+token }
+    })
+    .then(r=>r.json())
+    .then(data=>{
+        const results = document.getElementById("spotifyResults");
+        results.innerHTML="";
+        if(data.playlists && data.playlists.items.length>0){
+            data.playlists.items.forEach(pl=>{
+                const div = document.createElement("div");
+                div.className="entry";
+                div.innerHTML=`<strong>${pl.name}</strong><br><a href="${pl.external_urls.spotify}" target="_blank">Open in Spotify</a>`;
+                results.appendChild(div);
+            });
+        }
+        if(data.tracks && data.tracks.items.length>0){
+            data.tracks.items.forEach(tr=>{
+                const div = document.createElement("div");
+                div.className="entry";
+                div.innerHTML=`<strong>${tr.name}</strong> by ${tr.artists.map(a=>a.name).join(", ")}<br>
+                <audio controls src="${tr.preview_url}"></audio>`;
+                results.appendChild(div);
+            });
+        }
+    });
+}
+</script>
+
+{% endblock %}
