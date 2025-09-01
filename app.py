@@ -3,6 +3,7 @@ import google.generativeai as genai
 from config import Config
 import requests
 
+
 app = Flask(__name__)
 app.config.from_object(Config)
 app.secret_key = app.config["APP_SECRET"]
@@ -104,7 +105,26 @@ def spotify_search():
     r = requests.get(url, headers=headers)
 
     return jsonify(r.json())
-
+YOUTUBE_API_KEY = Config.YOUTUBE_API_KEY
+@app.route("/api/youtube", methods=["GET"])
+def youtube_search():
+    query = request.args.get("q", "relaxing meditation music")
+    url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&q={query}&key={YOUTUBE_API_KEY}"
+    
+    try:
+        r = requests.get(url)
+        r.raise_for_status()
+        data = r.json()
+        videos = []
+        for item in data.get("items", []):
+            videos.append({
+                "title": item["snippet"]["title"],
+                "videoId": item["id"]["videoId"],
+                "thumbnail": item["snippet"]["thumbnails"]["medium"]["url"]
+            })
+        return jsonify(videos)
+    except Exception as e:
+        return jsonify({"error": str(e)})
 # ----- Run App -----
 if __name__ == "__main__":
     app.run(debug=True)

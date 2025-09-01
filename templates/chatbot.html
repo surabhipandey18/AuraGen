@@ -69,6 +69,34 @@
       }
     }
   </script>
+  <script>
+const chatBox = document.getElementById("chat-box");
+
+// Function to add message
+function addMessage(sender, text) {
+  const msgDiv = document.createElement("div");
+  msgDiv.classList.add(sender);
+
+  const msgText = document.createElement("div");
+  msgText.classList.add("msg-text");
+  msgText.innerText = text;
+
+  const timeSpan = document.createElement("div");
+  timeSpan.classList.add("time");
+  timeSpan.innerText = new Date().toLocaleTimeString([], {hour: "2-digit", minute:"2-digit"});
+
+  msgDiv.appendChild(msgText);
+  msgDiv.appendChild(timeSpan);
+  chatBox.appendChild(msgDiv);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Show welcome message on page load
+window.onload = function() {
+  addMessage("bot", "Hello! I'm your mental wellness companion. How are you feeling today? I'm here to listen and support you. 💜");
+};
+</script>
+
 
   <style>
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }

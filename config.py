@@ -9,3 +9,5 @@ class Config:
     SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
     APP_SECRET = os.getenv("APP_SECRET", "dev-secret")
+    YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
+    

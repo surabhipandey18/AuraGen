@@ -4,19 +4,17 @@
 
 {% block content %}
 <main style="padding:2rem; max-width:900px; margin:auto;">
+    <!-- Spotify Section -->
     <div class="card">
         <h2>🎧 Music & Podcasts</h2>
 
-        <!-- Search input -->
         <input type="text" id="spotifyQuery" placeholder="Search for songs or podcasts...">
 
-        <!-- Type select -->
         <select id="spotifyType">
             <option value="track">Songs 🎶</option>
             <option value="show">Podcasts 🎙️</option>
         </select>
 
-        <!-- Mood select -->
         <select id="spotifyMood">
             <option value="">-- Select Mood --</option>
             <option value="happy">😊 Happy</option>
@@ -25,11 +23,21 @@
             <option value="energetic">⚡ Energetic</option>
         </select>
 
-        <!-- Search button -->
         <button onclick="searchSpotify()">Search</button>
     </div>
 
-    <div id="spotifyResults"></div>
+    <!-- YouTube Section -->
+    
+    <h2>🎥 Relax with YouTube Videos</h2>
+    
+    <input type="text" id="ytQuery" placeholder="Type mood e.g. relaxed, meditation, happy..." 
+           style="padding:0.5rem; width:60%; border-radius:6px; border:1px solid #ccc;">
+    <button onclick="searchYT()" 
+            style="padding:0.5rem 1rem; border:none; background:#0077b6; color:white; border-radius:6px; cursor:pointer;">
+        Search
+    </button>
+
+    <div id="ytResults" style="margin-top:2rem;"></div>
 </main>
 
 <footer>
@@ -37,81 +45,89 @@
 </footer>
 
 <style>
-/* Card styling */
-.card {
-    background: linear-gradient(145deg, #e0f7fa, #ffffff);
-    border-radius: 15px;
-    padding: 2rem;
-    text-align: center;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 35px rgba(0,0,0,0.18);
-}
+    /* Card styling */
+    .card {
+        background: linear-gradient(145deg, #e0f7fa, #ffffff);
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
 
-/* Inputs & selects */
-input, select {
-    padding: 0.6rem 1rem;
-    margin: 0.5rem 0.3rem;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-}
-input:focus, select:focus {
-    border-color: #0077b6;
-    box-shadow: 0 0 5px rgba(0,119,182,0.3);
-}
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+    }
 
-/* Button */
-button {
-    padding: 0.6rem 1.2rem;
-    border: none;
-    background: #0077b6;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-}
-button:hover {
-    background: #005f87;
-}
+    /* Inputs & selects */
+    input,
+    select {
+        padding: 0.6rem 1rem;
+        margin: 0.5rem 0.3rem;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+    }
 
-/* Results Grid */
-#spotifyResults {
-    margin-top: 2rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.2rem;
-}
+    input:focus,
+    select:focus {
+        border-color: #0077b6;
+        box-shadow: 0 0 5px rgba(0, 119, 182, 0.3);
+    }
 
-/* Individual entry */
-.entry {
-    background: #fff;
-    border-radius: 12px;
-    padding: 1rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    text-align: center;
-}
-.entry img {
-    border-radius: 10px;
-    margin-bottom: 0.5rem;
-    width: 100%;
-    max-width: 150px;
-}
-.entry audio {
-    margin-top: 0.5rem;
-    width: 100%;
-}
+    /* Button */
+    button {
+        padding: 0.6rem 1.2rem;
+        border: none;
+        background: #0077b6;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+    }
 
-/* Footer */
-footer {
-    text-align: center;
-    margin-top: 3rem;
-    color: #555;
-}
+    button:hover {
+        background: #005f87;
+    }
+
+    /* Results Grid */
+    #spotifyResults {
+        margin-top: 2rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.2rem;
+    }
+
+    /* Individual entry */
+    .entry {
+        background: #fff;
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        text-align: center;
+    }
+
+    .entry img {
+        border-radius: 10px;
+        margin-bottom: 0.5rem;
+        width: 100%;
+        max-width: 150px;
+    }
+
+    .entry audio {
+        margin-top: 0.5rem;
+        width: 100%;
+    }
+
+    /* Footer */
+    footer {
+        text-align: center;
+        margin-top: 3rem;
+        color: #555;
+    }
 </style>
 
+{% raw %}
 <script>
 function searchSpotify() {
     const query = document.getElementById("spotifyQuery").value.trim();
@@ -124,55 +140,86 @@ function searchSpotify() {
     }
 
     let finalQuery = query;
-    if (mood) finalQuery += " " + mood;  // Add mood to query
+    if (mood) finalQuery += " " + mood;
 
     fetch(`/api/spotify/search?q=${encodeURIComponent(finalQuery)}&type=${type}`)
-    .then(r => r.json())
-    .then(data => {
-        const results = document.getElementById("spotifyResults");
-        results.innerHTML = "";
+        .then(r => r.json())
+        .then(data => {
+            const results = document.getElementById("spotifyResults");
+            results.innerHTML = "";
 
-        if (type === "track" && data.tracks?.items?.length > 0) {
-            data.tracks.items.forEach(tr => {
-                const div = document.createElement("div");
-                div.className = "entry";
-                const spotifyLink = tr.external_urls?.spotify || "#";
-                div.innerHTML = `
-                    <img src="${tr.album.images[0]?.url || ''}">
-                    <strong>${tr.name}</strong><br>
-                    <em>${tr.artists.map(a=>a.name).join(", ")}</em><br>
-                    <a href="${spotifyLink}" target="_blank">Open in Spotify</a><br>
-                    ${tr.preview_url ? `<audio controls src="${tr.preview_url}"></audio>` : "<em>No preview available</em>"}
-                `;
-                results.appendChild(div);
-            });
-        }
+            if (type === "track" && data.tracks?.items?.length > 0) {
+                data.tracks.items.forEach(tr => {
+                    const div = document.createElement("div");
+                    div.className = "entry";
+                    const spotifyLink = tr.external_urls?.spotify || "#";
+                    div.innerHTML = `
+                        <img src="${tr.album.images[0]?.url || ''}">
+                        <strong>${tr.name}</strong><br>
+                        <em>${tr.artists.map(a=>a.name).join(", ")}</em><br>
+                        <a href="${spotifyLink}" target="_blank">Open in Spotify</a><br>
+                        ${tr.preview_url ? `<audio controls src="${tr.preview_url}"></audio>` : "<em>No preview available</em>"}
+                    `;
+                    results.appendChild(div);
+                });
+            }
 
-        if (type === "show" && data.shows?.items?.length > 0) {
-            data.shows.items.forEach(show => {
-                const div = document.createElement("div");
-                div.className = "entry";
-                const spotifyLink = show.external_urls?.spotify || "#";
-                div.innerHTML = `
-                    <img src="${show.images[0]?.url || ''}">
-                    <strong>${show.name}</strong><br>
-                    <em>${show.publisher}</em><br>
-                    <a href="${spotifyLink}" target="_blank">Listen on Spotify</a>
-                `;
-                results.appendChild(div);
-            });
-        }
+            if (type === "show" && data.shows?.items?.length > 0) {
+                data.shows.items.forEach(show => {
+                    const div = document.createElement("div");
+                    div.className = "entry";
+                    const spotifyLink = show.external_urls?.spotify || "#";
+                    div.innerHTML = `
+                        <img src="${show.images[0]?.url || ''}">
+                        <strong>${show.name}</strong><br>
+                        <em>${show.publisher}</em><br>
+                        <a href="${spotifyLink}" target="_blank">Listen on Spotify</a>
+                    `;
+                    results.appendChild(div);
+                });
+            }
 
-        if ((type === "track" && !data.tracks?.items?.length) ||
-            (type === "show" && !data.shows?.items?.length)) {
-            results.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>No results found 😔</p>";
+            if ((type === "track" && !data.tracks?.items?.length) ||
+                (type === "show" && !data.shows?.items?.length)) {
+                results.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>No results found 😔</p>";
+            }
+        })
+        .catch(err => {
+            console.error("Spotify error:", err);
+            document.getElementById("spotifyResults").innerHTML = "<p style='grid-column:1/-1; text-align:center; color:red;'>Error fetching results.</p>";
+        });
+}
+
+function searchYT() {
+    const query = document.getElementById("ytQuery").value.trim();
+    if (!query) return;
+
+    fetch(`/api/youtube?q=${encodeURIComponent(query)}`)
+      .then(r => r.json())
+      .then(data => {
+        const container = document.getElementById("ytResults");
+        container.innerHTML = "";
+
+        if (data.length > 0) {
+            const vid = data[0];
+            container.innerHTML = `
+                <h3>${vid.title}</h3>
+                <iframe width="560" height="315" 
+                        src="https://www.youtube.com/embed/${vid.videoId}" 
+                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                </iframe>
+            `;
+        } else {
+            container.innerHTML = "<p>No video found 😔</p>";
         }
-    })
-    .catch(err => {
-        console.error("Spotify error:", err);
-        document.getElementById("spotifyResults").innerHTML = "<p style='grid-column:1/-1; text-align:center; color:red;'>Error fetching results.</p>";
-    });
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById("ytResults").innerHTML = "<p style='color:red;'>Error loading video.</p>";
+      });
 }
 </script>
+{% endraw %}
 
 {% endblock %}
