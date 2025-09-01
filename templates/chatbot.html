@@ -4,12 +4,13 @@
 
 {% block content %}
 <main>
+  <p style="text-align:center; font-family:'Bree Serif', serif; margin: 10px auto; max-width:600px; color:#021D4F;">Sometimes, you just need someone to listen. Our AI-powered chatbot is here 24/7 to support you whenever you feel low, stressed, or just want to share your thoughts.</p>
   <div class="chat-container">
     <h1>🌸 SoulBloom Chatbot</h1>
     <div id="chat-box" class="chat-box"></div>
     <div class="input-area">
       <input type="text" id="userInput" placeholder="Type your message..." />
-      <button onclick="sendMessage()">Send</button>
+      <button class="btn" onclick="sendMessage()"><img src="{{ url_for('static', filename='images/send.png') }}">Send</button>
     </div>
   </div>
 
@@ -69,6 +70,7 @@
       }
     }
   </script>
+<<<<<<< HEAD
   <script>
 const chatBox = document.getElementById("chat-box");
 
@@ -199,6 +201,8 @@ window.onload = function() {
       40% { transform: scale(1); }
     }
   </style>
+=======
+>>>>>>> ba05fa125b641ba0fed70c363bd1eca15ee18aa7
 </main>
 
 {% endblock %}

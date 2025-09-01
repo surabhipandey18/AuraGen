@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Home - SoulBloom{% endblock %}
+{% block title %}Journal - SoulBloom{% endblock %}
 
 {% block content %}
 <main>
 <h2>My Journal</h2>
-<p style="margin-left: 225px;font-weight: lighter;">Capture your thoughts and reflections</p>
+<p style="text-align:center; font-family:'Bree Serif', serif; margin: 10px auto; max-width:600px; color:#021D4F;">Capture your thoughts and reflections</p>
 <div class="journal-box">
     <h4>Start Writing Today</h4>
     <p>Express your thoughts, feelings, and experiences in your digital journal</p>
     <a href="{{ url_for('journal_copy') }}" class="btn-journal"><img src="{{ url_for('static', filename='images/pen.png') }}" alt="pen icon">New Entry</a>
+    <a href="{{ url_for('get_journal_entries') }}" class="btn-journal"><img src="{{ url_for('static', filename='images/old.png') }}" alt="old-entry icon">Old Entries</a>
 </div>
 </main>
 {% endblock %}

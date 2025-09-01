@@ -1,18 +1,27 @@
 {% extends "base.html" %}
 
-{% block title %}Spotify - SoulBloom{% endblock %}
+{% block title %}Your Calm Space - SoulBloom{% endblock %}
 
 {% block content %}
+<<<<<<< HEAD
 <main style="padding:2rem; max-width:900px; margin:auto;">
     <!-- Spotify Section -->
     <div class="card">
         <h2>🎧 Music & Podcasts</h2>
 
+=======
+<p style="text-align:center; font-family:'Bree Serif', serif; margin: 10px auto; max-width:600px; color:#021D4F;">This is your personal space to relax, recharge, and feel at peace.</p>
+<main style="padding:1rem; max-width:900px; margin:auto;">
+    <div class="card">
+        <h2>Music & Podcasts</h2>
+        <p>Search by item or select mood.</p>
+        <!-- Search input -->
+>>>>>>> ba05fa125b641ba0fed70c363bd1eca15ee18aa7
         <input type="text" id="spotifyQuery" placeholder="Search for songs or podcasts...">
 
         <select id="spotifyType">
-            <option value="track">Songs 🎶</option>
-            <option value="show">Podcasts 🎙️</option>
+            <option value="track">Songs </option>
+            <option value="show">Podcasts </option>
         </select>
 
         <select id="spotifyMood">
@@ -23,7 +32,12 @@
             <option value="energetic">⚡ Energetic</option>
         </select>
 
+<<<<<<< HEAD
         <button onclick="searchSpotify()">Search</button>
+=======
+        <!-- Search button -->
+        <button class="btn" onclick="searchSpotify()"><img src="{{ url_for('static', filename='images/search.png') }}">Search</button>
+>>>>>>> ba05fa125b641ba0fed70c363bd1eca15ee18aa7
     </div>
 
     <!-- YouTube Section -->
@@ -39,6 +53,7 @@
 
     <div id="ytResults" style="margin-top:2rem;"></div>
 </main>
+<<<<<<< HEAD
 
 <footer>
     &copy; 2025 SoulBloom. All rights reserved.
@@ -128,6 +143,8 @@
 </style>
 
 {% raw %}
+=======
+>>>>>>> ba05fa125b641ba0fed70c363bd1eca15ee18aa7
 <script>
 function searchSpotify() {
     const query = document.getElementById("spotifyQuery").value.trim();
@@ -148,6 +165,7 @@ function searchSpotify() {
             const results = document.getElementById("spotifyResults");
             results.innerHTML = "";
 
+<<<<<<< HEAD
             if (type === "track" && data.tracks?.items?.length > 0) {
                 data.tracks.items.forEach(tr => {
                     const div = document.createElement("div");
@@ -178,6 +196,38 @@ function searchSpotify() {
                     results.appendChild(div);
                 });
             }
+=======
+        if (type === "track" && data.tracks?.items?.length > 0) {
+            data.tracks.items.forEach(tr => {
+                const div = document.createElement("div");
+                div.className = "entry";
+                const spotifyLink = tr.external_urls?.spotify || "#";
+                div.innerHTML = `
+                    <img src="${tr.album.images[0]?.url || ''}"><br>
+                    <strong>${tr.name}</strong><br>
+                    <em>${tr.artists.map(a=>a.name).join(", ")}</em><br>
+                    <a class="btn" href="${spotifyLink}" target="_blank">Open in Spotify</a><br>
+                    ${tr.preview_url ? `<audio controls src="${tr.preview_url}"></audio>` : "<em>No preview available</em>"}
+                `;
+                results.appendChild(div);
+            });
+        }
+
+        if (type === "show" && data.shows?.items?.length > 0) {
+            data.shows.items.forEach(show => {
+                const div = document.createElement("div");
+                div.className = "entry";
+                const spotifyLink = show.external_urls?.spotify || "#";
+                div.innerHTML = `
+                    <img src="${show.images[0]?.url || ''}"><br>
+                    <strong>${show.name}</strong><br>
+                    <em>${show.publisher}</em><br>
+                    <a href="${spotifyLink}" target="_blank">Listen on Spotify</a>
+                `;
+                results.appendChild(div);
+            });
+        }
+>>>>>>> ba05fa125b641ba0fed70c363bd1eca15ee18aa7
 
             if ((type === "track" && !data.tracks?.items?.length) ||
                 (type === "show" && !data.shows?.items?.length)) {

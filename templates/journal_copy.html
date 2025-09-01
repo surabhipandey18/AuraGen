@@ -1,53 +1,68 @@
 {% extends "base.html" %}
 
-{% block title %}Home - SoulBloom{% endblock %}
+{% block title %}
+  {% if edit_mode %}Edit Journal - SoulBloom{% else %}New Journal - SoulBloom{% endif %}
+{% endblock %}
 
 {% block content %}
 <main>
-    <div class="journal-container">
-    <h2>New Journal Entry</h2>
+  <div class="journal-container">
+    <h2>
+      {% if edit_mode %} Edit Journal Entry {% else %} New Journal Entry {% endif %}
+    </h2>
 
-    <div class="mood-picker">
-        <label for="mood-picker" style="font-family: 'Bree Serif', serif;">How are you feeling today buddy?</label>
-    <span id="selectedMood" class="selected-mood">🙂</span>
-    <div id="moodOptions" class="mood-options">
-      <span>😢</span>
-      <span>😐</span>
-      <span>🙂</span>
-      <span>😊</span>
-      <span>😄</span>
-    </div>
+    <form action="{% if edit_mode %}{{ url_for('update_journal', filename=filename) }}{% else %}{{ url_for('save_journal') }}{% endif %}" method="POST">
+      
+      <div class="mood-picker">
+        <label for="mood" style="font-family: 'Bree Serif', serif;">How are you feeling today buddy?</label>
+        <span id="selectedMood" class="selected-mood">{{ mood or "🙂" }}</span>
+        <input type="hidden" name="mood" id="moodInput" value="{{ mood or '🙂' }}">
+
+        <div id="moodOptions" class="mood-options">
+          <span>😢</span>
+          <span>😐</span>
+          <span>🙂</span>
+          <span>😊</span>
+          <span>😄</span>
+        </div>
+      </div>
+
+      <input type="text" name="title" class="entry-title" placeholder="Enter title..." value="{{ title or '' }}" required>
+
+      <textarea name="content" class="entry-text" placeholder="What's on your mind today? Write freely..." required>{{ content or '' }}</textarea>
+
+      <div class="buttons">
+        <a href="{{ url_for('get_journal_entries') }}" class="btn cancel">Back</a>
+        <button type="submit" class="btn save">
+          {% if edit_mode %} Update Entry {% else %} Save Entry {% endif %}
+        </button>
+      </div>
+    </form>
   </div>
-
-  <script>
-    const selectedMood = document.getElementById("selectedMood");
-    const moodOptions = document.getElementById("moodOptions");
-
-    selectedMood.addEventListener("click", () => {
-      moodOptions.classList.toggle("show");
-    });
-
-    moodOptions.addEventListener("click", (e) => {
-      if (e.target.tagName === "SPAN") {
-        selectedMood.textContent = e.target.textContent;
-        moodOptions.classList.remove("show");
-      }
-    });
-
-    document.addEventListener("click", (e) => {
-      if (!e.target.closest(".mood-picker")) {
-        moodOptions.classList.remove("show");
-      }
-    });
-  </script>
-    <input type="text" class="entry-title" placeholder="Enter title...">
-    <textarea class="entry-text" placeholder="What's on your mind today? Write freely about your thoughts, feelings, experiences, or anything that comes to heart..."></textarea>
-    <div class="buttons">
-      <button class="btn cancel">Cancel</button>
-      <button class="btn save">Save Entry</button>
-    </div>
-  </div>
-
 </main>
 
+<script>
+  const selectedMood = document.getElementById("selectedMood");
+  const moodOptions = document.getElementById("moodOptions");
+  const moodInput = document.getElementById("moodInput");
+
+  selectedMood.addEventListener("click", () => {
+    moodOptions.classList.toggle("show");
+  });
+
+  moodOptions.addEventListener("click", (e) => {
+    if (e.target.tagName === "SPAN") {
+      selectedMood.textContent = e.target.textContent;
+      moodInput.value = e.target.textContent; 
+      moodOptions.classList.remove("show");
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".mood-picker")) {
+      moodOptions.classList.remove("show");
+    }
+  });
+</script>
 {% endblock %}
+
