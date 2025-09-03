@@ -3,148 +3,172 @@
 {% block title %}Your Calm Space - SoulBloom{% endblock %}
 
 {% block content %}
-<<<<<<< HEAD
-<main style="padding:2rem; max-width:900px; margin:auto;">
-    <!-- Spotify Section -->
-    <div class="card">
-        <h2>🎧 Music & Podcasts</h2>
+<main style="padding:2rem; max-width:1200px; margin:auto;">
 
-=======
-<p style="text-align:center; font-family:'Bree Serif', serif; margin: 10px auto; max-width:600px; color:#021D4F;">This is your personal space to relax, recharge, and feel at peace.</p>
-<main style="padding:1rem; max-width:900px; margin:auto;">
-    <div class="card">
-        <h2>Music & Podcasts</h2>
-        <p>Search by item or select mood.</p>
-        <!-- Search input -->
->>>>>>> ba05fa125b641ba0fed70c363bd1eca15ee18aa7
-        <input type="text" id="spotifyQuery" placeholder="Search for songs or podcasts...">
+    <p style="text-align:center; font-family:'Bree Serif', serif; margin: 20px auto; max-width:700px; color:#021D4F; font-size:1.1rem;">
+        Welcome to your personal space to relax, recharge, and feel at peace.
+    </p>
 
-        <select id="spotifyType">
-            <option value="track">Songs </option>
-            <option value="show">Podcasts </option>
-        </select>
+    <!-- Two Column Layout -->
+    <div class="two-column">
 
-        <select id="spotifyMood">
-            <option value="">-- Select Mood --</option>
-            <option value="happy">😊 Happy</option>
-            <option value="sad">😔 Sad</option>
-            <option value="relaxed">😌 Relaxed</option>
-            <option value="energetic">⚡ Energetic</option>
-        </select>
+        <!-- Spotify Section -->
+        <div class="card">
+            <h2>🎧 Music & Podcasts</h2>
+            <p>Search by song, podcast, or select a mood.</p>
 
-<<<<<<< HEAD
-        <button onclick="searchSpotify()">Search</button>
-=======
-        <!-- Search button -->
-        <button class="btn" onclick="searchSpotify()"><img src="{{ url_for('static', filename='images/search.png') }}">Search</button>
->>>>>>> ba05fa125b641ba0fed70c363bd1eca15ee18aa7
+            <div class="search-controls">
+                <input type="text" id="spotifyQuery" placeholder="Search for songs or podcasts...">
+                <select id="spotifyType">
+                    <option value="track">Songs</option>
+                    <option value="show">Podcasts</option>
+                </select>
+                <select id="spotifyMood">
+                    <option value="">-- Select Mood --</option>
+                    <option value="happy">😊 Happy</option>
+                    <option value="sad">😔 Sad</option>
+                    <option value="relaxed">😌 Relaxed</option>
+                    <option value="energetic">⚡ Energetic</option>
+                </select>
+                <button class="btn" onclick="searchSpotify()">Search</button>
+            </div>
+
+            <div id="spotifyResults"></div>
+        </div>
+
+        <!-- YouTube Section -->
+        <div class="card">
+            <h2>🎥 Relax with YouTube Videos</h2>
+            <p>Type a mood or activity to find the perfect video.</p>
+
+            <div class="search-controls">
+                <input type="text" id="ytQuery" placeholder="e.g. meditation, relaxed, happy...">
+                <button class="btn" onclick="searchYT()">Search</button>
+            </div>
+
+            <div id="ytResults"></div>
+        </div>
+
     </div>
-
-    <!-- YouTube Section -->
-    
-    <h2>🎥 Relax with YouTube Videos</h2>
-    
-    <input type="text" id="ytQuery" placeholder="Type mood e.g. relaxed, meditation, happy..." 
-           style="padding:0.5rem; width:60%; border-radius:6px; border:1px solid #ccc;">
-    <button onclick="searchYT()" 
-            style="padding:0.5rem 1rem; border:none; background:#0077b6; color:white; border-radius:6px; cursor:pointer;">
-        Search
-    </button>
-
-    <div id="ytResults" style="margin-top:2rem;"></div>
 </main>
-<<<<<<< HEAD
 
 <footer>
     &copy; 2025 SoulBloom. All rights reserved.
 </footer>
 
 <style>
-    /* Card styling */
-    .card {
-        background: linear-gradient(145deg, #e0f7fa, #ffffff);
-        border-radius: 15px;
-        padding: 2rem;
-        text-align: center;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
+/* Two-column layout */
+.two-column {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
 
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
-    }
+/* Each card half width on large screen */
+.two-column .card {
+    flex: 1 1 48%;
+    min-width: 300px; /* mobile fallback */
+}
 
-    /* Inputs & selects */
-    input,
-    select {
-        padding: 0.6rem 1rem;
-        margin: 0.5rem 0.3rem;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 1rem;
-    }
+/* Card styling */
+.card {
+    background: linear-gradient(145deg, #e0f7fa, #ffffff);
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
 
-    input:focus,
-    select:focus {
-        border-color: #0077b6;
-        box-shadow: 0 0 5px rgba(0, 119, 182, 0.3);
-    }
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+}
 
-    /* Button */
-    button {
-        padding: 0.6rem 1.2rem;
-        border: none;
-        background: #0077b6;
-        color: white;
-        border-radius: 8px;
-        cursor: pointer;
-    }
+.search-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
 
-    button:hover {
-        background: #005f87;
-    }
+.search-controls input,
+.search-controls select {
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
 
-    /* Results Grid */
-    #spotifyResults {
-        margin-top: 2rem;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1.2rem;
-    }
+.search-controls input:focus,
+.search-controls select:focus {
+    border-color: #0077b6;
+    box-shadow: 0 0 5px rgba(0, 119, 182, 0.3);
+}
 
-    /* Individual entry */
-    .entry {
-        background: #fff;
-        border-radius: 12px;
-        padding: 1rem;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        text-align: center;
-    }
+button.btn {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    background: #0077b6;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
 
-    .entry img {
-        border-radius: 10px;
-        margin-bottom: 0.5rem;
-        width: 100%;
-        max-width: 150px;
-    }
+button.btn:hover {
+    background: #005f87;
+}
 
-    .entry audio {
-        margin-top: 0.5rem;
-        width: 100%;
-    }
+/* Spotify results grid */
+#spotifyResults {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+}
 
-    /* Footer */
-    footer {
-        text-align: center;
-        margin-top: 3rem;
-        color: #555;
-    }
+/* YouTube results */
+#ytResults {
+    margin-top: 1.5rem;
+}
+
+#ytResults iframe {
+    width: 100%;
+    height: 250px;
+    border-radius: 12px;
+}
+
+/* Individual entry */
+.entry {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.entry img {
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    max-width: 150px;
+}
+
+.entry audio {
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+footer {
+    text-align: center;
+    margin-top: 3rem;
+    color: #555;
+}
 </style>
 
 {% raw %}
-=======
->>>>>>> ba05fa125b641ba0fed70c363bd1eca15ee18aa7
 <script>
 function searchSpotify() {
     const query = document.getElementById("spotifyQuery").value.trim();
@@ -165,7 +189,6 @@ function searchSpotify() {
             const results = document.getElementById("spotifyResults");
             results.innerHTML = "";
 
-<<<<<<< HEAD
             if (type === "track" && data.tracks?.items?.length > 0) {
                 data.tracks.items.forEach(tr => {
                     const div = document.createElement("div");
@@ -196,38 +219,6 @@ function searchSpotify() {
                     results.appendChild(div);
                 });
             }
-=======
-        if (type === "track" && data.tracks?.items?.length > 0) {
-            data.tracks.items.forEach(tr => {
-                const div = document.createElement("div");
-                div.className = "entry";
-                const spotifyLink = tr.external_urls?.spotify || "#";
-                div.innerHTML = `
-                    <img src="${tr.album.images[0]?.url || ''}"><br>
-                    <strong>${tr.name}</strong><br>
-                    <em>${tr.artists.map(a=>a.name).join(", ")}</em><br>
-                    <a class="btn" href="${spotifyLink}" target="_blank">Open in Spotify</a><br>
-                    ${tr.preview_url ? `<audio controls src="${tr.preview_url}"></audio>` : "<em>No preview available</em>"}
-                `;
-                results.appendChild(div);
-            });
-        }
-
-        if (type === "show" && data.shows?.items?.length > 0) {
-            data.shows.items.forEach(show => {
-                const div = document.createElement("div");
-                div.className = "entry";
-                const spotifyLink = show.external_urls?.spotify || "#";
-                div.innerHTML = `
-                    <img src="${show.images[0]?.url || ''}"><br>
-                    <strong>${show.name}</strong><br>
-                    <em>${show.publisher}</em><br>
-                    <a href="${spotifyLink}" target="_blank">Listen on Spotify</a>
-                `;
-                results.appendChild(div);
-            });
-        }
->>>>>>> ba05fa125b641ba0fed70c363bd1eca15ee18aa7
 
             if ((type === "track" && !data.tracks?.items?.length) ||
                 (type === "show" && !data.shows?.items?.length)) {
