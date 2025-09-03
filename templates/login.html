@@ -21,19 +21,20 @@
       </div>
 
       <!-- Login Form -->
-      <form id="loginForm" class="form active">
-        <h2>Welcome Back</h2>
-        <label>Email</label>
-        <input type="email" id="loginEmail" required placeholder="Enter your email"/>
+<form id="loginForm" class="form active" method="POST" action="{{ url_for('login') }}">
+  <h2>Welcome Back</h2>
+  <label>Email</label>
+  <input type="text" name="username" required placeholder="Enter your username"/>
 
-        <label>Password</label>
-        <div class="password-wrapper">
-          <input type="password" id="loginPassword" required placeholder="Enter your password"/>
-          <button type="button" class="toggle-password">👁</button>
-        </div>
+  <label>Password</label>
+  <div class="password-wrapper">
+    <input type="password" name="password" required placeholder="Enter your password"/>
+    <button type="button" class="toggle-password">👁</button>
+  </div>
 
-        <button type="submit">Sign In</button>
-      </form>
+  <button type="submit">Sign In</button>
+</form>
+
 
       <!-- Register Form -->
       <form id="registerForm" class="form">
